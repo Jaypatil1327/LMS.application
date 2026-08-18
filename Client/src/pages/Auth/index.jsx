@@ -1,13 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GraduationCap } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import SignIN from "./signin";
 import SignUP from "./signup";
+import { authContext } from "@/context/auth-context";
 
 function Auth() {
-  const [state, setState] = useState("signin");
-
+  const { state, setState } = useContext(authContext);
   function handleTab(value) {
     setState(value);
   }
@@ -27,13 +27,11 @@ function Auth() {
             <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
-
           <TabsContent value="signin">
             <SignIN></SignIN>
           </TabsContent>
-
           <TabsContent value="signup">
-            <SignUP></SignUP>
+            <SignUP />
           </TabsContent>
         </Tabs>
       </div>

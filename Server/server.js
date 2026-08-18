@@ -2,25 +2,29 @@ import { config } from "dotenv";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import authRouter from "./router/authRouter.js";
 
 config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 const corsOptions = cors({
   origin: process.env.CLIENT_URL,
   methods: ["PUT", "POST", "GET", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 });
 
-app.use(express.json());
-app.use(cors(corsOptions));
-
-// database connection
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => console.log("connected to database"))
   .catch((e) => console.log(e));
+
+app.use(express.json());
+app.use(corsOptions);
+
+app.use("/auth", authRouter);
+
+// database connection
 
 // route configuration
 

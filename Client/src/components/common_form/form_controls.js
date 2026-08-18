@@ -2,13 +2,6 @@ import { Input } from "../ui/input";
 
 export const signin = [
   {
-    name: "name",
-    label: "Name",
-    placeholder: "Enter your name",
-    component: Input,
-    type: "text",
-  },
-  {
     name: "email",
     label: "Email",
     placeholder: "Enter your e-mail",
@@ -25,6 +18,13 @@ export const signin = [
 ];
 
 export const signup = [
+  {
+    name: "name",
+    label: "Name",
+    placeholder: "Enter your name",
+    component: Input,
+    type: "text",
+  },
   {
     name: "email",
     label: "Email",

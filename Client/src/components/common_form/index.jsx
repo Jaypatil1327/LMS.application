@@ -1,13 +1,15 @@
 import { Controller } from "react-hook-form";
 import { Card } from "../ui/card";
-import { Field, FieldGroup, FieldLabel } from "../ui/field";
+import { Field, FieldGroup, FieldLabel, FieldError } from "../ui/field";
 import { Component } from "react";
 import { Button } from "../ui/button";
+import { Spinner } from "../ui/spinner";
 
 function Common_Form({
   formConfig,
   form,
   handleSubmit,
+  loading,
   buttonText = "Submit",
 }) {
   return (
@@ -44,7 +46,7 @@ function Common_Form({
           })}
         </FieldGroup>
         <Button type="submit" className={"w-full"}>
-          {buttonText}
+          {loading ? <Spinner /> : buttonText}
         </Button>
       </form>
     </Card>
