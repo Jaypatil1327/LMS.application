@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { register } from "@/services";
+import { login } from "../services";
 export const authContext = createContext(null);
 const signupSchema = z.object({
   name: z.string(),
@@ -40,9 +41,16 @@ export function AuthProvider({ children }) {
   });
   const [loading, isLoading] = useState(false);
   const [state, setState] = useState("signin");
+  const [auth, setAuth] = useState({});
 
   async function handleSignin(vals) {
-    console.log(vals);
+    isLoading(true);
+    const data = await login(vals);
+    console.log(data);
+    if (data.status) {
+      sessionStorage.setItem("accessToken", data.data.access_token);
+    }
+    isLoading(false);
   }
 
   async function handleSignup(vals) {

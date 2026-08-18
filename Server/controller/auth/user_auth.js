@@ -21,8 +21,6 @@ export async function signup(req, res) {
       data: newlyCreatedUser,
     });
   } catch (error) {
-    console.log("ERROR:", error);
-
     res.status(400).json({
       success: false,
       message: error.message,
@@ -32,10 +30,10 @@ export async function signup(req, res) {
 
 export async function signin(req, res) {
   try {
+    console.log("request received");
     const { email, password } = req.body;
-    const checkUser = await User.findById({ email: email });
-
-    if (!checkUser && decodePassword(password, checkUser.password)) {
+    const checkUser = await User.findOne({ email: email });
+    if (checkUser && decodePassword(password, checkUser.password)) {
       const access_token = jwt.sign(
         {
           _id: checkUser._id,
@@ -57,7 +55,7 @@ export async function signin(req, res) {
         status: true,
         message: "login success",
       });
-    } else throw new Error("User does not exist's");
+    } else throw new Error("User does not exist");
   } catch (error) {
     return res.status(400).json({
       status: false,

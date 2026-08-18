@@ -5,3 +5,8 @@ export async function register(obj) {
   console.log(data);
   return data;
 }
+
+export async function login(obj) {
+  const { data } = await axiosInstance.post("/auth/signin", obj);
+  return data;
+}
