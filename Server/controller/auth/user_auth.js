@@ -30,7 +30,6 @@ export async function signup(req, res) {
 
 export async function signin(req, res) {
   try {
-    console.log("request received");
     const { email, password } = req.body;
     const checkUser = await User.findOne({ email: email });
     if (checkUser && decodePassword(password, checkUser.password)) {
@@ -45,8 +44,8 @@ export async function signin(req, res) {
         { expiresIn: "20m" },
       );
       return res.status(200).json({
+        access_token: access_token,
         data: {
-          access_token: access_token,
           _id: checkUser._id,
           name: checkUser.name,
           email: checkUser.email,

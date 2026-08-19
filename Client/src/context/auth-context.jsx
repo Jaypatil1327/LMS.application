@@ -1,8 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { register } from "@/services";
+import { checkAuthService, register } from "@/services";
 import { login } from "../services";
 export const authContext = createContext(null);
 const signupSchema = z.object({
@@ -41,14 +41,20 @@ export function AuthProvider({ children }) {
   });
   const [loading, isLoading] = useState(false);
   const [state, setState] = useState("signin");
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState({
+    authenticated: false,
+    data: null,
+  });
 
   async function handleSignin(vals) {
     isLoading(true);
     const data = await login(vals);
-    console.log(data);
     if (data.status) {
-      sessionStorage.setItem("accessToken", data.data.access_token);
+      sessionStorage.setItem("accessToken", data.access_token);
+      setAuth({
+        authenticated: true,
+        data: data.data,
+      });
     }
     isLoading(false);
   }
@@ -59,6 +65,23 @@ export function AuthProvider({ children }) {
     isLoading(false);
     setState("signin");
   }
+
+  async function checkAuth() {
+    const data = await checkAuthService();
+    if (data.status) {
+      setAuth({
+        authenticated: true,
+        data: data.data,
+      });
+    }
+  }
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  console.log(auth);
+
   return (
     <authContext.Provider
       value={{

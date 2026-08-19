@@ -6,8 +6,9 @@ const authRouter = Router();
 authRouter.post("/signup", signup);
 authRouter.post("/signin", signin);
 
-authRouter.post("/check_auth", authenticate, (req, res) => {
+authRouter.get("/check_auth", authenticate, (req, res) => {
   res.status(200).json({
+    status: true,
     data: {
       user: req.user,
     },
