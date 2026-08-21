@@ -7,6 +7,7 @@ import SignUP from "./signup";
 import { authContext } from "@/context/auth-context";
 
 function Auth() {
+  console.log("auth page");
   const { state, setState } = useContext(authContext);
   function handleTab(value) {
     setState(value);

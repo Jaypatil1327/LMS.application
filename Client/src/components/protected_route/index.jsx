@@ -2,29 +2,29 @@ import { Navigate, useLocation } from "react-router-dom";
 
 function ProtectedRoute({ authenticated, user, element }) {
   const loc = useLocation();
-
   // Not authenticated
-
-  if (!authenticated) {
+  console.log(loc.pathname, authenticated, "protected route");
+  if (!authenticated && !loc.pathname.includes("/auth")) {
     return <Navigate to="/auth"></Navigate>;
   }
 
-  // Normal user +
+  // Normal user + not instructor
   if (
     authenticated &&
     user?.role !== "admin" &&
-    (loc.pathname.includes("/admin") || loc.pathname.includes("/auth"))
+    (loc.pathname.includes("/instructor") || loc.pathname.includes("/auth"))
   ) {
     return <Navigate to={"/home"}></Navigate>;
   }
+
+  // instructor and trying to load user page
   if (
     authenticated &&
     user.role === "admin" &&
-    !loc.pathname.includes("/admin")
+    !loc.pathname.includes("/instructor")
   ) {
-    return <Navigate to={"/admin"}></Navigate>;
+    return <Navigate to={"/instructor"}></Navigate>;
   }
-
   return <>{element}</>;
 }
 

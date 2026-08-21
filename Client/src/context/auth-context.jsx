@@ -4,6 +4,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkAuthService, register } from "@/services";
 import { login } from "../services";
+
 export const authContext = createContext(null);
 const signupSchema = z.object({
   name: z.string(),
@@ -50,6 +51,7 @@ export function AuthProvider({ children }) {
     isLoading(true);
     const data = await login(vals);
     if (data.status) {
+      signinForm.reset();
       sessionStorage.setItem("accessToken", data.access_token);
       setAuth({
         authenticated: true,
@@ -68,10 +70,16 @@ export function AuthProvider({ children }) {
 
   async function checkAuth() {
     const data = await checkAuthService();
-    if (data.status) {
+    console.log(data);
+    if (data?.status) {
       setAuth({
         authenticated: true,
         data: data.data,
+      });
+    } else {
+      setAuth({
+        authenticated: false,
+        data: null,
       });
     }
   }
@@ -80,11 +88,13 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
-  console.log(auth);
+  console.log(auth, "auth context");
 
   return (
     <authContext.Provider
       value={{
+        auth,
+        setAuth,
         signinForm,
         signupForm,
         handleSignin,

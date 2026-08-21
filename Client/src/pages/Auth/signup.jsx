@@ -1,5 +1,5 @@
 import Common_Form from "@/components/common_form";
-import { signup } from "@/components/common_form/form_controls";
+import { signup } from "@/config";
 import { authContext } from "@/context/auth-context";
 import { useContext } from "react";
 

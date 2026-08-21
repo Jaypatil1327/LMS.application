@@ -1,9 +1,16 @@
 import { Controller } from "react-hook-form";
 import { Card } from "../ui/card";
 import { Field, FieldGroup, FieldLabel, FieldError } from "../ui/field";
-import { Component } from "react";
 import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 function Common_Form({
   formConfig,
@@ -17,8 +24,6 @@ function Common_Form({
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FieldGroup>
           {formConfig.map((item) => {
-            const Component = item.component;
-
             return (
               <Controller
                 key={item.name}
@@ -26,15 +31,34 @@ function Common_Form({
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field>
-                    <FieldLabel className={"font-semibold"}>
+                    <FieldLabel className="font-semibold">
                       {item.label}
                     </FieldLabel>
 
-                    <Component
-                      {...field}
-                      type={item.type}
-                      placeholder={item.placeholder}
-                    />
+                    {item.type === "select" ? (
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={item.placeholder} />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          {item.options.map((ops) => (
+                            <SelectItem value={ops.id} key={ops.id}>
+                              {ops.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <item.component
+                        type={item.type}
+                        placeholder={item.placeholder}
+                        {...field}
+                      />
+                    )}
 
                     {fieldState.error && (
                       <FieldError>{fieldState.error.message}</FieldError>
@@ -45,7 +69,8 @@ function Common_Form({
             );
           })}
         </FieldGroup>
-        <Button type="submit" className={"w-full"}>
+
+        <Button type="submit" className="w-full">
           {loading ? <Spinner /> : buttonText}
         </Button>
       </form>

@@ -12,6 +12,11 @@ export async function login(obj) {
 }
 
 export async function checkAuthService() {
-  const { data } = await axiosInstance.get("/auth/check_auth");
-  return data;
+  try {
+    const { data } = await axiosInstance.get("/auth/check_auth");
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    return null;
+  }
 }
