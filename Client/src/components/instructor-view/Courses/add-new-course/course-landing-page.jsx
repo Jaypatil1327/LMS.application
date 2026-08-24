@@ -4,12 +4,12 @@ import { InstructorContext } from "@/context/instructor-context";
 import { useContext } from "react";
 
 function CourseLandingPage() {
-  const { instructorForm, handleSubmit } = useContext(InstructorContext);
+  const { InsturctorForm, handleSubmit } = useContext(InstructorContext);
   return (
-    <div className="w-2xl">
+    <div className="w-full">
       <Common_Form
         formConfig={courseLandingPageFormControls}
-        form={instructorForm}
+        form={InsturctorForm}
         handleSubmit={handleSubmit}
       ></Common_Form>
     </div>

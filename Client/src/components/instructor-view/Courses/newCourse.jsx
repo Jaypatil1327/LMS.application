@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseCurriculum from "./add-new-course/curriculam";
 import CourseSettings from "./add-new-course/settings";
@@ -7,36 +7,62 @@ import CourseLandingPage from "./add-new-course/course-landing-page";
 
 function CreateNewCourse() {
   return (
-    <div className="min-h-screen p-4 space-y-4">
-      <div className="flex justify-between items-start">
-        <h1 className="text-xl font-bold">Create new Course</h1>
-        <Button className={"px-4 py-2"}>SUBMIT</Button>
+    <div className="w-full mx-auto p-4 md:p-8 space-y-6 max-w-4xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-lg md:text-xl font-bold">Create New Course</h1>
+        <Button className="px-6 py-2 w-full sm:w-auto font-medium shadow-sm">
+          SUBMIT
+        </Button>
       </div>
-      <Card>
-        <div>
-          <Tabs
-            defaultValue="curriculum"
-            className={"flex justify-center items-center gap-4"}
+
+      <Tabs defaultValue="curriculum" className="flex flex-col w-full">
+        <div className="w-full mb-4 overflow-x-auto pb-1">
+          <TabsList
+            variant="line"
+            className="flex w-max min-w-full justify-start sm:justify-center border-b border-gray-200 bg-transparent h-auto p-0"
           >
-            <TabsList variant="line">
-              <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-              <TabsTrigger value="course-landing-page">
-                Course-landing-page
-              </TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
-            </TabsList>
-            <TabsContent value="curriculum">
-              <CourseCurriculum></CourseCurriculum>
-            </TabsContent>
-            <TabsContent value="course-landing-page">
-              <CourseLandingPage />
-            </TabsContent>
-            <TabsContent value="settings">
-              <CourseSettings></CourseSettings>
-            </TabsContent>
-          </Tabs>
+            <TabsTrigger
+              value="curriculum"
+              className="text-sm px-3 py-2.5 sm:px-6 shrink-0"
+            >
+              Curriculum
+            </TabsTrigger>
+            <TabsTrigger
+              value="course-landing-page"
+              className="text-sm px-3 py-2.5 sm:px-6 shrink-0"
+            >
+              Course Landing Page
+            </TabsTrigger>
+            <TabsTrigger
+              value="settings"
+              className="text-sm px-3 py-2.5 sm:px-6 shrink-0"
+            >
+              Settings
+            </TabsTrigger>
+          </TabsList>
         </div>
-      </Card>
+
+        <div className="mt-4 w-full">
+          <TabsContent
+            value="curriculum"
+            className="w-full focus-visible:outline-none"
+          >
+            <CourseCurriculum />
+          </TabsContent>
+          <TabsContent
+            value="course-landing-page"
+            className="w-full focus-visible:outline-none"
+          >
+            <CourseLandingPage />
+          </TabsContent>
+          <TabsContent
+            value="settings"
+            className="w-full focus-visible:outline-none"
+          >
+            <CourseSettings />
+          </TabsContent>
+        </div>
+      </Tabs>
     </div>
   );
 }

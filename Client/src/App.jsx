@@ -7,56 +7,58 @@ import InstructorPage from "./pages/instructor";
 import StudentHomePAage from "./pages/student/home";
 import StudentLayout from "./components/student-view";
 import CreateNewCourse from "./components/instructor-view/Courses/newCourse";
+import { ThemeProvider } from "next-themes";
 
 export default function App() {
   const { auth } = useContext(authContext);
-  console.log(auth);
   return (
-    <Routes>
-      <Route
-        path="/auth"
-        element={
-          <ProtectedRoute
-            user={auth.data}
-            authenticated={auth.authenticated}
-            element={<Auth></Auth>}
-          ></ProtectedRoute>
-        }
-      ></Route>
-      <Route
-        path="/instructor"
-        element={
-          <ProtectedRoute
-            user={auth.data}
-            authenticated={auth.authenticated}
-            element={<InstructorPage />}
-          ></ProtectedRoute>
-        }
-      ></Route>
+    <ThemeProvider attribute={"class"}>
+      <Routes>
+        <Route
+          path="/auth"
+          element={
+            <ProtectedRoute
+              user={auth.data}
+              authenticated={auth.authenticated}
+              element={<Auth></Auth>}
+            ></ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/instructor"
+          element={
+            <ProtectedRoute
+              user={auth.data}
+              authenticated={auth.authenticated}
+              element={<InstructorPage />}
+            ></ProtectedRoute>
+          }
+        ></Route>
 
-      <Route
-        path="/instructor/create-new-course"
-        element={
-          <ProtectedRoute
-            user={auth.data}
-            authenticated={auth.authenticated}
-            element={<CreateNewCourse />}
-          ></ProtectedRoute>
-        }
-      ></Route>
+        <Route
+          path="/instructor/create-new-course"
+          element={
+            <ProtectedRoute
+              user={auth.data}
+              authenticated={auth.authenticated}
+              element={<CreateNewCourse />}
+            ></ProtectedRoute>
+          }
+        ></Route>
 
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute
-            user={auth.data}
-            authenticated={auth.authenticated}
-            element={<StudentLayout />}
-          ></ProtectedRoute>
-        }
-      >
-        <Route path="/home" element={<StudentHomePAage />}></Route>
-      </Route>
-    </Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute
+              user={auth.data}
+              authenticated={auth.authenticated}
+              element={<StudentLayout />}
+            ></ProtectedRoute>
+          }
+        >
+          <Route path="/home" element={<StudentHomePAage />}></Route>
+        </Route>
+      </Routes>
+    </ThemeProvider>
   );
 }

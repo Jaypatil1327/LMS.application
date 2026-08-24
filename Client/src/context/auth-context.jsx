@@ -50,14 +50,17 @@ export function AuthProvider({ children }) {
   async function handleSignin(vals) {
     isLoading(true);
     const data = await login(vals);
-    if (data.status) {
+    if (data) {
       signinForm.reset();
       sessionStorage.setItem("accessToken", data.access_token);
       setAuth({
         authenticated: true,
         data: data.data,
       });
+    } else {
+      console.log("invalid password or user does not exists");
     }
+
     isLoading(false);
   }
 

@@ -156,3 +156,10 @@ export const courseLandingInitialFormData = {
   welcomeMessage: "",
   image: "",
 };
+
+export const initialCourseCurriculam = {
+  title: "",
+  freePreview: false,
+  public_id: "",
+  video_url: "",
+};

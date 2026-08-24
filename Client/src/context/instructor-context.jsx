@@ -1,23 +1,46 @@
-import { courseLandingInitialFormData } from "@/config";
-import { createContext } from "react";
-import { useForm } from "react-hook-form";
+import {
+  courseLandingInitialFormData,
+  initialCourseCurriculam,
+} from "@/config";
+import { createContext, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 export const InstructorContext = createContext(null);
 
 export function InstructorContextProvider({ children }) {
-  const instructorForm = useForm({
-    defaultValues: courseLandingInitialFormData,
+  const InsturctorForm = useForm({
+    defaultValues: {
+      ...courseLandingInitialFormData,
+    },
+  });
+  const MediaForm = useForm({
+    defaultValues: {
+      lectures: [
+        {
+          title: "",
+          freePreview: false,
+          video_url: "",
+          public_id: "",
+        },
+      ],
+    },
   });
 
-  const handleSubmit = async (data) => {
-    console.log(data);
-  };
+  const Lectures = useFieldArray({
+    control: MediaForm.control,
+    name: "lectures",
+  });
 
+  function handleSubmit(data) {
+    console.log(data);
+  }
   return (
     <InstructorContext.Provider
       value={{
-        instructorForm,
+        InsturctorForm,
         handleSubmit,
+        Lectures,
+        MediaForm,
       }}
     >
       {children}

@@ -20,9 +20,12 @@ function Common_Form({
   buttonText = "Submit",
 }) {
   return (
-    <Card className="p-4">
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <FieldGroup>
+    <Card className="p-4 sm:p-6 w-full shadow-sm border border-gray-100">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-5 w-full"
+      >
+        <FieldGroup className="w-full">
           {formConfig.map((item) => {
             return (
               <Controller
@@ -30,8 +33,8 @@ function Common_Form({
                 name={item.name}
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field>
-                    <FieldLabel className="font-semibold">
+                  <Field className="w-full">
+                    <FieldLabel className="font-semibold break-words whitespace-normal text-left mb-1">
                       {item.label}
                     </FieldLabel>
 
@@ -40,7 +43,7 @@ function Common_Form({
                         value={field.value}
                         onValueChange={field.onChange}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder={item.placeholder} />
                         </SelectTrigger>
 
@@ -56,6 +59,7 @@ function Common_Form({
                       <item.component
                         type={item.type}
                         placeholder={item.placeholder}
+                        className="w-full"
                         {...field}
                       />
                     )}
@@ -70,8 +74,12 @@ function Common_Form({
           })}
         </FieldGroup>
 
-        <Button type="submit" className="w-full">
-          {loading ? <Spinner /> : buttonText}
+        <Button
+          type="submit"
+          className="w-full mt-4 h-11 text-base font-medium"
+        >
+          {loading ? <Spinner className="mr-2" /> : null}
+          {loading ? "Submitting..." : buttonText}
         </Button>
       </form>
     </Card>

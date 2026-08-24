@@ -32,7 +32,9 @@ export async function signin(req, res) {
   try {
     const { email, password } = req.body;
     const checkUser = await User.findOne({ email: email });
-    if (checkUser && decodePassword(password, checkUser.password)) {
+    const validPassword = await decodePassword(password, checkUser.password);
+    console.log(validPassword);
+    if (checkUser && validPassword) {
       const access_token = jwt.sign(
         {
           _id: checkUser._id,
@@ -54,7 +56,7 @@ export async function signin(req, res) {
         status: true,
         message: "login success",
       });
-    } else throw new Error("User does not exist");
+    } else throw new Error("User does not exist or Invalid Password");
   } catch (error) {
     return res.status(400).json({
       status: false,
