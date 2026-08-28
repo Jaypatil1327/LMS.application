@@ -7,14 +7,14 @@ import { Switch } from "@/components/ui/switch";
 import VideoPlayer from "@/components/VideoPlayer";
 import { initialCourseCurriculam } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
-import { videoUpload } from "@/services/instructor";
+import { deleteMedia, videoUpload } from "@/services/instructor";
 import { useContext, useState } from "react";
 import { Controller } from "react-hook-form";
 
 function CourseCurriculum() {
   const { MediaForm, Lectures } = useContext(InstructorContext);
-  const { fields, append, remove } = Lectures;
-  const { register, setValue, control, watch } = MediaForm;
+  const { fields, append } = Lectures;
+  const { register, setValue, control, getValues } = MediaForm;
 
   const [uploading, setUploading] = useState(false);
   const [progess, setProgress] = useState(0);
@@ -61,11 +61,31 @@ function CourseCurriculum() {
     append(initialCourseCurriculam);
     setVideoUrl((prev) => [...prev, ""]);
   }
+
+  async function handleReplace(index) {
+    try {
+      const publicId = getValues(`lectures.${index}.public_id`);
+      const status = await deleteMedia(publicId);
+      if (status) {
+        setValue(`lecture.${index}.video_url`, "");
+        setVideoUrl((prev) => {
+          const updated = [...prev];
+          updated[index] = "";
+          return updated;
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
   return (
     <Card className="flex flex-col space-y-4 px-4 py-6 shadow-xl">
       <div className="flex justify-between items-center">
         <h1>Create Course Curriculum</h1>
-        <Button onClick={MediaForm.handleSubmit(handleSubmit)}>
+        <Button
+          onClick={MediaForm.handleSubmit(handleSubmit)}
+          disable={uploading.toString()}
+        >
           Add Course
         </Button>
       </div>
@@ -104,7 +124,18 @@ function CourseCurriculum() {
             </div>
             <div className="flex gap-4">
               {videoUrl[index] !== "" ? (
-                <VideoPlayer videoUrl={videoUrl[index]} />
+                <div className="flex flex-col gap-4">
+                  <VideoPlayer videoUrl={videoUrl[index]} />
+                  <div className="flex justify-center items-center gap-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => handleReplace(index)}
+                    >
+                      Replace
+                    </Button>
+                    <Button variant="destructive">Delete</Button>
+                  </div>
+                </div>
               ) : (
                 <Input
                   accept="video/*"

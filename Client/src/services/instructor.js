@@ -19,3 +19,12 @@ export async function videoUpload(video, onProgress) {
     console.log(error.message);
   }
 }
+
+export async function deleteMedia(id) {
+  try {
+    const { status } = await axiosInstance.post(`/media/delete/${id}`);
+    return status;
+  } catch (error) {
+    console.log(object);
+  }
+}
