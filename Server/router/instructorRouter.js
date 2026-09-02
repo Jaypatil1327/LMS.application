@@ -12,7 +12,6 @@ const upload = multer({
 
 mediaRouter.post("/upload", upload.single("file"), async (req, res) => {
   try {
-    console.log(req.file);
     const response = await uploadMediaToCloudinary(req.file);
     return res.status(200).json({
       status: true,

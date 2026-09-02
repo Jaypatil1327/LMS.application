@@ -123,18 +123,13 @@ function CourseCurriculum() {
               </Label>
             </div>
             <div className="flex gap-4">
-              {videoUrl[index] !== "" ? (
-                <div className="flex flex-col gap-4">
-                  <VideoPlayer videoUrl={videoUrl[index]} />
-                  <div className="flex justify-center items-center gap-4">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleReplace(index)}
-                    >
-                      Replace
-                    </Button>
-                    <Button variant="destructive">Delete</Button>
-                  </div>
+              {(uploading && progess === 100) || videoUrl[index] !== "" ? (
+                <div className="flex flex-col gap-4 ">
+                  <VideoPlayer
+                    videoUrl={videoUrl[index]}
+                    handleReplace={handleReplace}
+                    index={index}
+                  />
                 </div>
               ) : (
                 <Input

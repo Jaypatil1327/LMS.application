@@ -31,12 +31,18 @@ export function InstructorContextProvider({ children }) {
     name: "lectures",
   });
 
+  function handleUpload() {
+    console.log(InsturctorForm.getValues());
+    console.log(MediaForm.getValues());
+  }
+
   function handleSubmit(data) {
     console.log(data);
   }
   return (
     <InstructorContext.Provider
       value={{
+        handleUpload,
         InsturctorForm,
         handleSubmit,
         Lectures,

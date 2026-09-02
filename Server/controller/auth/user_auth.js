@@ -31,6 +31,7 @@ export async function signup(req, res) {
 export async function signin(req, res) {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
     const checkUser = await User.findOne({ email: email });
     const validPassword = await decodePassword(password, checkUser.password);
     console.log(validPassword);

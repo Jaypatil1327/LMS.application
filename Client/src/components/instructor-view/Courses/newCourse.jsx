@@ -4,13 +4,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseCurriculum from "./add-new-course/curriculam";
 import CourseSettings from "./add-new-course/settings";
 import CourseLandingPage from "./add-new-course/course-landing-page";
+import { useContext } from "react";
+import { InstructorContext } from "@/context/instructor-context";
 
 function CreateNewCourse() {
+  const { handleUpload } = useContext(InstructorContext);
   return (
     <div className="w-full mx-auto p-4 md:p-8 space-y-6 max-w-4xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-lg md:text-xl font-bold">Create New Course</h1>
-        <Button className="px-6 py-2 w-full sm:w-auto font-medium shadow-sm">
+        <Button
+          onClick={() => handleUpload()}
+          className="px-6 py-2 w-full sm:w-auto font-medium shadow-sm"
+        >
           SUBMIT
         </Button>
       </div>
