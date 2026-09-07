@@ -63,7 +63,7 @@ export function InstructorContextProvider({ children }) {
     name: "lectures",
   });
 
-  InstructorForm.watch("lectures");
+  const lectures = InstructorForm.watch("lectures");
 
   function handleSubmit(data) {
     console.log("form submit");
@@ -73,6 +73,7 @@ export function InstructorContextProvider({ children }) {
   return (
     <InstructorContext.Provider
       value={{
+        lectures,
         InstructorForm,
         handleSubmit,
         fields,
