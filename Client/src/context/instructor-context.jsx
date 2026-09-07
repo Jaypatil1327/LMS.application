@@ -1,52 +1,83 @@
-import {
-  courseLandingInitialFormData,
-  initialCourseCurriculam,
-} from "@/config";
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const InstructorSchema = z.object({
+  title: z.string(),
+  category: z.string(),
+  level: z.string(),
+  primaryLanguage: z.string(),
+  subtitle: z.string(),
+  description: z.string(),
+  pricing: z.string(),
+  objectives: z.string(),
+  welcomeMessage: z.string(),
+  public_id: z.string(),
+  image: z.string(),
+
+  lectures: z.array(
+    z.object({
+      title: z.string(),
+      freePreview: z.boolean(),
+      public_id: z.string(),
+      video_url: z.string(),
+      submitted: z.boolean(),
+    }),
+  ),
+});
 
 export const InstructorContext = createContext(null);
 
 export function InstructorContextProvider({ children }) {
-  const InsturctorForm = useForm({
+  const InstructorForm = useForm({
     defaultValues: {
-      ...courseLandingInitialFormData,
-    },
-  });
-  const MediaForm = useForm({
-    defaultValues: {
+      title: "",
+      category: "",
+      level: "",
+      primaryLanguage: "",
+      subtitle: "",
+      description: "",
+      pricing: "",
+      objectives: "",
+      welcomeMessage: "",
+      public_id: "",
+      image: "",
+
       lectures: [
         {
           title: "",
           freePreview: false,
-          video_url: "",
+          submitted: false,
           public_id: "",
+          video_url: "",
         },
       ],
     },
+
+    resolver: zodResolver(InstructorSchema),
   });
 
-  const Lectures = useFieldArray({
-    control: MediaForm.control,
+  const { fields, append, remove } = useFieldArray({
+    control: InstructorForm.control,
     name: "lectures",
   });
 
-  function handleUpload() {
-    console.log(InsturctorForm.getValues());
-    console.log(MediaForm.getValues());
-  }
+  InstructorForm.watch("lectures");
 
   function handleSubmit(data) {
+    console.log("form submit");
     console.log(data);
   }
+
   return (
     <InstructorContext.Provider
       value={{
-        handleUpload,
-        InsturctorForm,
+        InstructorForm,
         handleSubmit,
-        Lectures,
-        MediaForm,
+        fields,
+        append,
+        remove,
       }}
     >
       {children}

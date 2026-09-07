@@ -1,15 +1,18 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
-const curriculamSchema = new Mongoose.Schema({
+const curriculamSchema = new mongoose.Schema({
   title: String,
   publicId: String,
   videoUrl: String,
   freePreview: Boolean,
 });
 
-const CourseSchema = new mongoose.Schema({
+const CourseSchema = mongoose.Schema({
   instructorName: String,
-  data: Date,
+  date: {
+    type: Date,
+    default: Date.now(),
+  },
   title: String,
   category: String,
   level: String,
@@ -31,4 +34,4 @@ const CourseSchema = new mongoose.Schema({
   curriculam: [curriculamSchema],
 });
 
-module.exports = mongoose.model("Course", CourseSchema);
+export const Course = mongoose.model("Course", CourseSchema);

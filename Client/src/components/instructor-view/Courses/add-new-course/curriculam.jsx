@@ -1,152 +1,133 @@
 import ProgressComponent from "@/components/progress";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import VideoPlayer from "@/components/VideoPlayer";
-import { initialCourseCurriculam } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
-import { deleteMedia, videoUpload } from "@/services/instructor";
+import { videoUpload } from "@/services/instructor";
 import { useContext, useState } from "react";
-import { Controller } from "react-hook-form";
 
-function CourseCurriculum() {
-  const { MediaForm, Lectures } = useContext(InstructorContext);
-  const { fields, append } = Lectures;
-  const { register, setValue, control, getValues } = MediaForm;
+export default function CourseCurriculum({ setPage }) {
+  const [file, setFile] = useState(null);
+  const [uploading, setUplading] = useState(false);
+  const [progess, setProgess] = useState(0);
 
-  const [uploading, setUploading] = useState(false);
-  const [progess, setProgress] = useState(0);
-  const [videoUrl, setVideoUrl] = useState([""]);
+  const { fields, remove, append, InstructorForm } =
+    useContext(InstructorContext);
 
-  async function handleFile(event, index) {
-    const file = event.target.files[0];
+  function addLecture() {
+    const status = fields[0];
+    console.log(fields);
+    append({
+      title: "",
+      freePreview: false,
+      public_id: "",
+      video_url: "",
+      submitted: false,
+    });
+  }
 
-    if (!file) return;
-
+  async function handleSubmit(index) {
+    console.log(index);
     try {
-      setUploading(true);
-      setProgress(0);
+      setUplading(true);
 
-      const video = new FormData();
-      video.append("file", file);
+      if (!file) {
+        throw new Error("File does not exist");
+      }
 
-      const data = await videoUpload(video, (progress) => {
-        setProgress(progress);
-      });
+      const formData = new FormData();
+      formData.append("file", file);
 
-      if (data.status) {
-        setValue(`lectures.${index}.video_url`, data.result.url);
+      const data = await videoUpload(formData, setProgess);
 
-        setValue(`lectures.${index}.public_id`, data.result.public_id);
+      if (data) {
+        InstructorForm.setValue(`lectures.${index}.video_url`, data.result.url);
 
-        setVideoUrl((prev) => {
-          const updated = [...prev];
-          updated[index] = data.result.url;
-          return updated;
-        });
+        InstructorForm.setValue(
+          `lectures.${index}.public_id`,
+          data.result.public_id,
+        );
+
+        InstructorForm.setValue(`lectures.${index}.submitted`, true);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error.message);
     } finally {
-      setUploading(false);
+      setUplading(false);
     }
   }
 
-  function handleSubmit(data) {
-    const arr = data.lectures;
-    const n = arr.length - 1;
-    if (arr[n].title === "" && arr[n].public_id === "") return;
-    append(initialCourseCurriculam);
-    setVideoUrl((prev) => [...prev, ""]);
-  }
-
-  async function handleReplace(index) {
-    try {
-      const publicId = getValues(`lectures.${index}.public_id`);
-      const status = await deleteMedia(publicId);
-      if (status) {
-        setValue(`lecture.${index}.video_url`, "");
-        setVideoUrl((prev) => {
-          const updated = [...prev];
-          updated[index] = "";
-          return updated;
-        });
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
   return (
-    <Card className="flex flex-col space-y-4 px-4 py-6 shadow-xl">
-      <div className="flex justify-between items-center">
-        <h1>Create Course Curriculum</h1>
+    <div className="flex flex-col gap-4">
+      <div className="flex text-xl font-bold justify-between">
+        <h1>Curriculam</h1>
+        <Button onClick={() => addLecture()}>Add Lecture</Button>
+      </div>
+      {fields.map((lec, index) => (
+        <Card key={index}>
+          <CardContent className={"flex flex-col gap-4 p-4"}>
+            <div className="flex gap-4">
+              <Label className={"font-semibold"}>Title</Label>
+              <Input
+                {...InstructorForm.register(`lectures.${index}.title`)}
+                placeholder="Enter Lecture Title"
+              ></Input>
+            </div>
+            <div className="flex justify-center items-center gap-4 px-4 py-2">
+              <Input
+                type={"file"}
+                accept="video/*"
+                onChange={(data) => {
+                  setFile(data.target.files[0]);
+                }}
+              ></Input>
+              <div className="flex gap-4">
+                <Label className={"shrink-0 "}>Free Preview</Label>
+                <Switch
+                  {...InstructorForm.register(`lectures.${index}.freePrview`)}
+                  defaultChecked={false}
+                ></Switch>
+              </div>
+            </div>
+            <div className="flex justify-between gap-4">
+              {uploading && progess <= 100 ? (
+                <ProgressComponent value={progess}></ProgressComponent>
+              ) : null}
+              <div className="flex gap-4 mx-auto">
+                <Button variant="outline" onClick={() => handleSubmit(index)}>
+                  Submit
+                </Button>
+                <Button variant="destructive">Remove</Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+      <div className="flex justify-end gap-2">
         <Button
-          onClick={MediaForm.handleSubmit(handleSubmit)}
-          disable={uploading.toString()}
+          className={"px-4 py-2"}
+          onClick={() => {
+            setPage((prev) => {
+              if (prev + 1 <= 2) return prev + 1;
+              else prev;
+            });
+          }}
         >
-          Add Course
+          Next
+        </Button>
+        <Button
+          onClick={() => {
+            setPage((prev) => {
+              if (prev - 1 >= 0) return prev - 1;
+              else prev;
+            });
+          }}
+        >
+          Previous
         </Button>
       </div>
-      <div className="space-y-4">
-        {fields.map((field, index) => (
-          <Card key={field.id} className="flex flex-col px-4 py-2">
-            <div className="flex items-center justify-start gap-4">
-              <Label
-                htmlFor={`lectures.${index}.title`}
-                className={"shrink-0 font-semibold"}
-              >
-                Enter Title
-              </Label>
-              <Input
-                {...register(`lectures.${index}.title`)}
-                id={`lectures.${index}.title`}
-                placeholder="Enter Title"
-              ></Input>
-              <Controller
-                name={`lectures.${index}.freePreview`}
-                control={control}
-                render={({ field }) => (
-                  <Switch
-                    id={`freePreview-${index}`}
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                )}
-              />
-              <Label
-                id={`lectures.${index}.freePreview`}
-                className={"shrink-0 font-semibold"}
-              >
-                Free Preview
-              </Label>
-            </div>
-            <div className="flex gap-4">
-              {(uploading && progess === 100) || videoUrl[index] !== "" ? (
-                <div className="flex flex-col gap-4 ">
-                  <VideoPlayer
-                    videoUrl={videoUrl[index]}
-                    handleReplace={handleReplace}
-                    index={index}
-                  />
-                </div>
-              ) : (
-                <Input
-                  accept="video/*"
-                  type={"file"}
-                  onChange={(event) => handleFile(event, index)}
-                ></Input>
-              )}
-            </div>
-          </Card>
-        ))}
-        {uploading && progess < 100 ? (
-          <ProgressComponent value={progess}></ProgressComponent>
-        ) : null}
-      </div>
-    </Card>
+    </div>
   );
 }
-
-export default CourseCurriculum;

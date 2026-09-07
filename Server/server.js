@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import authRouter from "./router/authRouter.js";
 import mediaRouter from "./router/instructorRouter.js";
+import courseRouter from "./router/courseRoute.js";
 
 config();
 
@@ -28,6 +29,7 @@ app.use(corsOptions);
 
 app.use("/auth", authRouter);
 app.use("/media", mediaRouter);
+app.use("/course", courseRouter);
 
 app.listen(port, () => {
   console.log("connected to server successfully");

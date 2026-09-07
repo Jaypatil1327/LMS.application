@@ -6,7 +6,7 @@ import {
 
 function ProgressComponent({ value }) {
   return (
-    <Progress value={value}>
+    <Progress value={value} className={"w-full"}>
       <ProgressLabel>
         {value === 100 ? "Uploaded" : "Upload progress"}
       </ProgressLabel>

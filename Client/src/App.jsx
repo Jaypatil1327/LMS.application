@@ -6,7 +6,7 @@ import { authContext } from "./context/auth-context";
 import InstructorPage from "./pages/instructor";
 import StudentHomePAage from "./pages/student/home";
 import StudentLayout from "./components/student-view";
-import CreateNewCourse from "./components/instructor-view/Courses/newCourse";
+import CreateNewCourse from "./components/instructor-view/Courses/new-course";
 import { ThemeProvider } from "next-themes";
 
 export default function App() {
