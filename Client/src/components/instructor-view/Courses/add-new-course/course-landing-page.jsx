@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { InstructorContext } from "@/context/instructor-context";
+import { ArrowRight } from "lucide-react";
 import { useContext } from "react";
 
 function CourseLandingPage({ setPage, page }) {
@@ -33,6 +34,7 @@ function CourseLandingPage({ setPage, page }) {
         ></Textarea>
         <div className="self-end">
           <Button
+            className={"px-4 py-2"}
             onClick={() => {
               setPage((prev) => {
                 if (prev + 1 <= 2) return prev + 1;
@@ -40,17 +42,7 @@ function CourseLandingPage({ setPage, page }) {
               });
             }}
           >
-            Next
-          </Button>
-          <Button
-            onClick={() => {
-              setPage((prev) => {
-                if (prev - 1 >= 0) return prev - 1;
-                return prev;
-              });
-            }}
-          >
-            Previous
+            <ArrowRight />
           </Button>
         </div>
       </CardContent>

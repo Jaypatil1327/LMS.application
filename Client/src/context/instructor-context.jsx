@@ -22,7 +22,6 @@ const InstructorSchema = z.object({
       freePreview: z.boolean(),
       public_id: z.string(),
       video_url: z.string(),
-      submitted: z.boolean(),
     }),
   ),
 });
@@ -48,7 +47,6 @@ export function InstructorContextProvider({ children }) {
         {
           title: "",
           freePreview: false,
-          submitted: false,
           public_id: "",
           video_url: "",
         },

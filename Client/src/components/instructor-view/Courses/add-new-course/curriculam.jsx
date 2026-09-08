@@ -15,9 +15,23 @@ import { videoUpload } from "@/services/instructor";
 import { useContext, useState } from "react";
 
 export default function CourseCurriculum({ setPage }) {
-  const { fields, InstructorForm, lectures } = useContext(InstructorContext);
+  const { fields, append, InstructorForm, lectures } =
+    useContext(InstructorContext);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  function addLecture() {
+    const lastIdx = fields.length;
+    console.log(lastIdx);
+    if (lectures[lastIdx - 1].title !== "") {
+      append({
+        title: "",
+        freePreview: false,
+        public_id: "",
+        video_url: "",
+      });
+    }
+  }
 
   async function handleUpload(event, index) {
     try {
@@ -47,7 +61,9 @@ export default function CourseCurriculum({ setPage }) {
     <div className="space-y-4 p-4">
       <div className="flex justify-between items-center">
         <h1 className={"text-xl"}>Curriculam</h1>
-        <Button disable={uploading.toString()}>Add New Lecture</Button>
+        <Button disable={uploading.toString()} onClick={addLecture}>
+          Add New Lecture
+        </Button>
       </div>
       {fields.map((vals, index) => (
         <Card className={"p-4"} key={index}>
