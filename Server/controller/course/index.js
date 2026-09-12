@@ -3,6 +3,7 @@ import { Course } from "../../models/course.js";
 const addNewCourse = async (req, res) => {
   try {
     const values = req.body;
+
     const newlyCreatedCourse = await Course.create({
       instructorName: values.instructorName,
       title: values.title,
@@ -17,9 +18,18 @@ const addNewCourse = async (req, res) => {
       public_id: values.public_id,
       image: values.image,
       students: [],
-      curriculam: [...values.curriculam],
+      curriculam: [...values.lectures],
     });
-  } catch (error) {}
+    return res.status(201).json({
+      stattus: true,
+      result: newlyCreatedCourse,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: false,
+      result: error.message,
+    });
+  }
 };
 
 const getAllCourse = async (req, res) => {

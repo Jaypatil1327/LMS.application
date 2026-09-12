@@ -9,7 +9,6 @@ export async function register(obj) {
 export async function login(obj) {
   try {
     const { data } = await axiosInstance.post("/auth/signin", obj);
-    console.log(data);
     return data;
   } catch (error) {
     return null;

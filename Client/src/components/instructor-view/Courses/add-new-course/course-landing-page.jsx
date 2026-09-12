@@ -21,10 +21,14 @@ function CourseLandingPage({ setPage, page }) {
           placeholder="Enter Description"
         ></Textarea>
         <Label className="md:text-[1rem]">Price</Label>
-        <Input {...register("price")} type="number" placeholder="122"></Input>
+        <Input
+          {...register("pricing")}
+          type="number"
+          placeholder="enter course price"
+        ></Input>
         <Label className={"md:text-[1rem]"}>Objective</Label>
         <Textarea
-          {...register("ojective")}
+          {...register("objectives")}
           placeholder="Enter objectives of this course"
         ></Textarea>
         <Label className={"md:text-[1rem]"}>Welcome Message</Label>
@@ -34,7 +38,7 @@ function CourseLandingPage({ setPage, page }) {
         ></Textarea>
         <div className="self-end">
           <Button
-            className={"px-4 py-2"}
+            className={"px-8 py-2"}
             onClick={() => {
               setPage((prev) => {
                 if (prev + 1 <= 2) return prev + 1;
@@ -42,7 +46,7 @@ function CourseLandingPage({ setPage, page }) {
               });
             }}
           >
-            <ArrowRight />
+            NEXT
           </Button>
         </div>
       </CardContent>

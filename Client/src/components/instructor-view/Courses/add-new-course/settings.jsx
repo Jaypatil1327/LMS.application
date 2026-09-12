@@ -10,16 +10,18 @@ import {
   languageOptions,
 } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
+import { courseUpload } from "@/services/course";
 import { deleteMedia, videoUpload } from "@/services/instructor";
 import { useContext, useState } from "react";
 
-function CourseSettings() {
-  const { InstructorForm, handleSubmit } = useContext(InstructorContext);
+function CourseSettings({ setPage }) {
+  const { InstructorForm } = useContext(InstructorContext);
   const [uploading, setUploading] = useState(false);
   const watchImage = InstructorForm.watch("image");
-  console.log(watchImage);
+
   async function handleUpload(event) {
     try {
+      setUploading(true);
       const file = event.target.files[0];
       if (file) {
         if (watchImage) {
@@ -32,7 +34,23 @@ function CourseSettings() {
         InstructorForm.setValue("image", result.result.url);
         InstructorForm.setValue("public_id", result.result.public_id);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleSubmit(data) {
+    try {
+      setUploading(true);
+      const result = await courseUpload(data);
+      console.log(result.data.result);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -76,13 +94,10 @@ function CourseSettings() {
             </div>
           )}
         </CardContent>
-        <CardFooter className={"w-full"}>
-          <Button
-            className={"w-full"}
-            type="submit"
-            disable={uploading.toString()}
-          >
-            Upload Course
+        <CardFooter className={"w-full grid grid-cols-2 "}>
+          <Button onClick={() => setPage((prev) => prev - 1)}>PREVIOUS</Button>
+          <Button type="submit" disable={uploading.toString()}>
+            UPLOAD COURSE
           </Button>
         </CardFooter>
       </Card>

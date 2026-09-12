@@ -97,12 +97,17 @@ export default function CourseCurriculum({ setPage }) {
       ) : null}
       <div className="flex justify-end gap-2">
         <Button
-          className={"px-4 py-2"}
+          className={"px-6 py-2"}
           onClick={() => setPage((prev) => prev + 1)}
         >
-          Next
+          NEXT
         </Button>
-        <Button className={"px-4 py-2"}>Previous</Button>
+        <Button
+          className={"px-6 py-2"}
+          onClick={() => setPage((prev) => prev - 1)}
+        >
+          PREVIOUS
+        </Button>
       </div>
     </div>
   );

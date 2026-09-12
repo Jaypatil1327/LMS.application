@@ -10,7 +10,7 @@ const InstructorSchema = z.object({
   primaryLanguage: z.string(),
   subtitle: z.string(),
   description: z.string(),
-  pricing: z.string(),
+  pricing: z.coerce.number(),
   objectives: z.string(),
   welcomeMessage: z.string(),
   public_id: z.string(),
@@ -63,17 +63,11 @@ export function InstructorContextProvider({ children }) {
 
   const lectures = InstructorForm.watch("lectures");
 
-  function handleSubmit(data) {
-    console.log("form submit");
-    console.log(data);
-  }
-
   return (
     <InstructorContext.Provider
       value={{
         lectures,
         InstructorForm,
-        handleSubmit,
         fields,
         append,
         remove,
